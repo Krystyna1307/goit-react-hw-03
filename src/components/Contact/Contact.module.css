@@ -1,0 +1,16 @@
+.item {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid black;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.4s ease-in-out;
+  cursor: pointer;
+  background-color: bisque;
+}
+.contact {
+  display: flex;
+  flex-direction: column;
+}
