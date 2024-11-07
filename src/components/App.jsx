@@ -9,6 +9,7 @@ import { nanoid } from "nanoid";
 const App = () => {
   const [names, setNames] = useState(contacts);
   const [filter, setFilter] = useState("");
+
   const handleAddName = (name, number) => {
     const newName = {
       // id: Date.now().toString(),
@@ -18,13 +19,15 @@ const App = () => {
     };
     setNames((prev) => [...prev, newName]);
   };
+
   const handleDeleteName = (id) => {
     setNames((prev) => prev.filter((item) => item.id !== id)); //Повертаємо нову колекцію без того елемента, який має id
   };
 
   const visibleTasks = names.filter((name) =>
-    name.text.toLowerCase().includes(filter.toLowerCase())
+    name.name.toLowerCase().includes(filter.toLowerCase())
   );
+  console.log(names);
 
   return (
     <div>
