@@ -1,7 +1,7 @@
 import React from "react";
 import s from "./Contact.module.css";
 
-const Contact = ({ id, name, number, handleDeleteName }) => {
+const Contact = ({ id, name, number, onDelete }) => {
   return (
     <li className={s.item}>
       <div className={s.contact}>
@@ -9,7 +9,7 @@ const Contact = ({ id, name, number, handleDeleteName }) => {
         <span>{number}</span>
       </div>
 
-      <button onClick={() => handleDeleteName(id)}>Delete</button>
+      <button onClick={() => onDelete(id)}>Delete</button>
     </li>
   );
 };

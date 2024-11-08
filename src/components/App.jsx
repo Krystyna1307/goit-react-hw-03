@@ -2,39 +2,37 @@ import "modern-normalize";
 import SearchBox from "./SearchBox/SearchBox";
 import ContactList from "./ContactList/ContactList";
 import ContactForm from "./ContactForm/ContactForm";
-import { useState } from "react";
-import contacts from "./../assets/contacts.json";
-import { nanoid } from "nanoid";
+import { useEffect, useState } from "react";
 
 const App = () => {
-  const [names, setNames] = useState(contacts);
+  const [contacts, setContacts] = useState([
+    { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+    { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+    { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+    { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
+  ]);
   const [filter, setFilter] = useState("");
 
-  const handleAddName = (name, number) => {
-    const newName = {
-      // id: Date.now().toString(),
-      id: nanoid(),
-      name,
-      number,
-    };
-    setNames((prev) => [...prev, newName]);
-  };
+  // Додамо логіку збереження в LocalStorage
+  useEffect(() => {
+    const savedContacts = JSON.parse(localStorage.getItem("contacts"));
+    if (savedContacts) setContacts(savedContacts);
+  }, []);
 
-  const handleDeleteName = (id) => {
-    setNames((prev) => prev.filter((item) => item.id !== id)); //Повертаємо нову колекцію без того елемента, який має id
-  };
-
-  const visibleTasks = names.filter((name) =>
-    name.name.toLowerCase().includes(filter.toLowerCase())
-  );
-  console.log(names);
+  useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
 
   return (
     <div>
-      <h1>Phonebook</h1>
-      <ContactForm handleAddName={handleAddName} />
-      <SearchBox value={filter} onFilter={setFilter} />
-      <ContactList names={visibleTasks} handleDeleteName={handleDeleteName} />
+      <h1 style={{ margin: 15 }}>Phonebook</h1>
+      <ContactForm setContacts={setContacts} contacts={contacts} />
+      <SearchBox filter={filter} setFilter={setFilter} />
+      <ContactList
+        contacts={contacts}
+        filter={filter}
+        setContacts={setContacts}
+      />
     </div>
   );
 };

@@ -1,17 +1,26 @@
 import React, { useState } from "react";
-import contacts from "./../../assets/contacts.json";
 import Contact from "../Contact/Contact";
 import s from "./ContactList.module.css";
 
-const ContactList = ({ names, handleDeleteName }) => {
+const ContactList = ({ contacts, filter, setContacts }) => {
+  const handleDelete = (id) => {
+    setContacts(contacts.filter((contact) => contact.id !== id));
+  };
+
+  const filteredContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <div className={s.wrapper}>
       <ul className={s.list}>
-        {names.map((item) => (
+        {filteredContacts.map(({ id, name, number }) => (
           <Contact
-            key={item.id}
-            {...item}
-            handleDeleteName={handleDeleteName}
+            key={id}
+            id={id}
+            name={name}
+            number={number}
+            onDelete={handleDelete}
           />
         ))}
       </ul>

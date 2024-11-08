@@ -1,46 +1,44 @@
-import React, { useState } from "react";
 import s from "./ContactForm.module.css";
+import { Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import { nanoid } from "nanoid";
 
-const ContactForm = ({ handleAddName }) => {
-  const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
+const ContactForm = ({ setContacts, contacts }) => {
+  const validationSchema = Yup.object({
+    name: Yup.string().min(3).max(50).required(),
+    number: Yup.string().required(),
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Запобігає перезавантаженню
-    handleAddName(name, number); // Передаємо дані у функцію
-    setName(""); // Очищаємо поле після додавання
-    setNumber(""); // Очищаємо поле після додавання
+  const handleSubmit = (values, { resetForm }) => {
+    const newContact = {
+      id: nanoid(),
+      name: values.name,
+      number: values.number,
+    };
+    setContacts([...contacts, newContact]);
+    resetForm();
   };
 
   return (
-    <div>
-      <form className={s.form} onSubmit={handleSubmit}>
-        <label className={s.label}>
-          Name
-          <input
-            type="text"
-            name="name"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
-        </label>
-        <label>
-          Number
-          <input
-            type="tel"
-            name="phone"
-            onChange={(e) => setNumber(e.target.value)}
-            value={number}
-            required
-            pattern="\d{3}-\d{2}-\d{2}"
-            title="Будь ласка, введіть телефон у форматі 000-00-00"
-          />
-        </label>
+    <div className={s.wrapper}>
+      <Formik
+        initialValues={{ name: "", number: "" }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form className={s.form}>
+          <label className={s.label}>
+            Name
+            <Field className={s.input} type="text" name="name" />
+          </label>
+          <label>
+            Number
+            <Field className={s.input} type="tel" name="number" />
+          </label>
 
-        <button onClick={() => handleAddName(id)} type="submit">
-          Add contact
-        </button>
-      </form>
+          <button type="submit">Add contact</button>
+        </Form>
+      </Formik>
     </div>
   );
 };
